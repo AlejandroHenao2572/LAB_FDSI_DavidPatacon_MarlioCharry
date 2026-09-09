@@ -1,0 +1,12 @@
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+enp108s0         DOWN           
+wlan0            UP             10.16.9.231/20 fe80::f28f:7d12:de51:4138/64 
+br-e67df6850ce9  DOWN           172.21.0.1/16 
+br-fe9bea6d6ed8  DOWN           172.18.0.1/16 
+docker0          DOWN           172.17.0.1/16 
+br-53b28ec1b6b4  DOWN           172.20.0.1/16 
+br-6e5022487476  DOWN           172.23.0.1/16 fe80::e8f3:adff:fec1:3253/64 
+br-8a7a20ae6fc1  UP             172.22.0.1/16 fe80::80ab:6dff:fe0f:59ba/64 
+br-c727bd0b801c  DOWN           172.19.0.1/16 
+veth23c43e5@if2  UP             fe80::4c6a:8cff:fe2f:86b6/64 
+veth4fd4c2f@if2  UP             fe80::cc97:9dff:fe4d:9774/64 

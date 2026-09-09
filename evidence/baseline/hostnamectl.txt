@@ -1,0 +1,15 @@
+  Static hostname: cachyos-x8664
+        Icon name: computer-laptop
+          Chassis: laptop 💻
+Chassis Asset Tag: No Asset Tag
+       Machine ID: 628a5965ea1f4f61b1e0a1dc3eb2ccf3
+          Boot ID: b3d8fcfc843247618e331f3e15411d69
+ Operating System: CachyOS
+           Kernel: Linux 7.2.2-1-cachyos
+     Architecture: x86-64
+  Hardware Vendor: ASUSTeK COMPUTER INC.
+   Hardware Model: ROG Strix G614JV_G614JV
+ Hardware Version: 1.0
+ Firmware Version: G614JV.331
+    Firmware Date: Mon 2024-11-11
+     Firmware Age: 1y 9month 4w
