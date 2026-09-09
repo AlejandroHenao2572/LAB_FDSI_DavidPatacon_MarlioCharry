@@ -43,7 +43,32 @@ Evidencia guardada en `evidence/baseline/`.
 
 **Paso 2 — Instalación de Nginx**
 
+Se instaló Nginx como servidor web mediante el gestor de paquetes del sistema
+(`pacman`, propio de Arch/CachyOS — la guía original usa `apt` para Ubuntu):
 
-## Estado
+```bash
+sudo pacman -S nginx
+sudo systemctl enable --now nginx
+sudo systemctl status nginx --no-pager
+sudo ss -lntp | grep ':80'
+```
 
-En progreso — Fase A, Paso 2 (instalación de Nginx).
+Resultado:
+- Servicio activo: `active (running)`, PID `458896`.
+- Puerto 80/TCP en escucha, propiedad de `nginx`.
+
+Verificación funcional — Nginx responde con su página por defecto antes de
+publicar el contenido propio del laboratorio:
+
+```bash
+curl -i http://127.0.0.1/
+```
+
+HTTP/1.1 200 OK
+Server: nginx/1.30.4
+
+Evidencia guardada en:
+- `evidence/baseline/nginx_status.txt`
+- `evidence/baseline/curl_nginx_default.txt`
+
+![alt text](evidence/img/nginx.png)
