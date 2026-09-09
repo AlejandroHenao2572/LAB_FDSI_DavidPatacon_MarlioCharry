@@ -72,3 +72,26 @@ Evidencia guardada en:
 - `evidence/baseline/curl_nginx_default.txt`
 
 ![alt text](evidence/img/nginx.png)
+
+**Paso 3 — Creación de la aplicación mínima**
+
+Se creó un sitio estático ficticio sin autenticación, con dos archivos dentro
+de `app/` (fuente de verdad en el repo, luego copiados al servidor):
+
+`app/index.html` — página principal del portal ficticio MuvAutomation:
+
+```html
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>MuvAutomation Lab</title></head>
+<body>
+ <h1>MuvAutomation Asset Portal</h1>
+ <p>Environment: LAB</p>
+ <p>Owner: Blue Team</p>
+ <a href="/public-inventory.txt">Inventario público de demostración</a>
+</body>
+</html>
+```
+
+`app/public-inventory.txt` — inventario ficticio de activos.
+
