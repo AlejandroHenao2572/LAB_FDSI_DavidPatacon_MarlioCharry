@@ -1,0 +1,5 @@
+total 16
+drwxr-xr-x 2 root root 4096 Sep 12 20:31 .
+drwxr-xr-x 4 root root 4096 Sep 12 20:30 ..
+-rw-r--r-- 1 root root  302 Sep 12 20:31 alerts-inventory.json
+-rw-r--r-- 1 root root  348 Sep 12 20:31 index.html
