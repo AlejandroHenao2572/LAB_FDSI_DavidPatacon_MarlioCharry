@@ -1,0 +1,5 @@
+[
+  {"alert_id": "ALERT-LAB-01", "severity": "high", "status": "open", "endpoint": "WEB-LAB-01"},
+  {"alert_id": "ALERT-LAB-02", "severity": "medium", "status": "investigating", "endpoint": "API-LAB-01"},
+  {"alert_id": "ALERT-LAB-03", "severity": "low", "status": "closed", "endpoint": "DB-LAB-01"}
+]

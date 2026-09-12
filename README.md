@@ -1,97 +1,37 @@
-# MuvAutomation Secure Product Challenge — Lab 3
+# CrowdStrike Falcon - Incident Automation Lab
 
-**Autores:** David Alejandro Patacón Henao, Marlio Jose Charry Espitia
-**Curso:** FDSI 2026-2
+## Propósito
+Prototipo académico (FDSI, Laboratorio 3 - Secure Product Challenge) que simula
+la recepción y consulta de alertas de seguridad de CrowdStrike Falcon (Alerts API),
+usando datos ficticios. No se integra con CrowdStrike real ni usa credenciales reales.
 
-## Arquitectura
+## Requisitos
+- Ubuntu Server 26.04 LTS
+- Nginx
+- Python 3 (para pruebas locales)
+- Git
 
-- Entorno de práctica local: CachyOS (Arch Linux), usado como sustituto temporal
-  de la VM Ubuntu Server asignada por el docente.
-- Servidor web: Nginx.
-- Fase actual de referencia local: `127.0.0.1` (localhost). Cuando el docente
-  asigne la IP/CIDR reales, se repiten los mismos pasos allí.
+## Ejecución local
+cd app
+python3 -m http.server 8080
+# abrir http://localhost:8080
 
-## Variables de entorno
+## Procedimiento de despliegue
+1. sudo apt install -y nginx
+2. Copiar app/ a /var/www/crowdstrike-lab
+3. Copiar nginx/crowdstrike-lab.conf a /etc/nginx/sites-available/ y habilitarlo
+4. sudo nginx -t && sudo systemctl reload nginx
+5. Firewall: permitir solo el segmento 192.168.56.0/24 en el puerto 80 (ufw)
 
-```bash
-export TARGET_IP=127.0.0.1        # temporal, local — se reemplaza por la IP asignada
-export TARGET_URL=http://$TARGET_IP
-export LAB_CIDR=127.0.0.1/32      # temporal, local — se reemplaza por el CIDR asignado
-```
+## URL publicada
+http://192.168.56.102/ — red host-only de VirtualBox (entorno de laboratorio local,
+sin exposición a internet por falta de créditos cloud).
 
-## Procedimiento de reproducción
+## Integrantes
+David Alejandro Patacón Henao, Marlio Charry
 
-### Fase A — Construcción y publicación
-
-**Paso 1 — Verificación de línea base del host**
-
-Se confirmó identidad y estado del host antes de instalar cualquier servicio:
-
-```bash
-hostnamectl
-ip -br address
-uname -a
-date -u +%Y-%m-%dT%H:%M:%SZ
-```
-
-Resultado relevante:
-- Host: `cachyos-x8664` (CachyOS, kernel `7.2.2-1-cachyos`)
-- Interfaz de referencia: `lo` → `127.0.0.1` (localhost, usada para pruebas locales)
-- Timestamp de inicio del laboratorio: `2026-09-09T22:53:09Z`
-
-Evidencia guardada en `evidence/baseline/`.
-
-**Paso 2 — Instalación de Nginx**
-
-Se instaló Nginx como servidor web mediante el gestor de paquetes del sistema
-(`pacman`, propio de Arch/CachyOS — la guía original usa `apt` para Ubuntu):
-
-```bash
-sudo pacman -S nginx
-sudo systemctl enable --now nginx
-sudo systemctl status nginx --no-pager
-sudo ss -lntp | grep ':80'
-```
-
-Resultado:
-- Servicio activo: `active (running)`, PID `458896`.
-- Puerto 80/TCP en escucha, propiedad de `nginx`.
-
-Verificación funcional — Nginx responde con su página por defecto antes de
-publicar el contenido propio del laboratorio:
-
-```bash
-curl -i http://127.0.0.1/
-```
-
-HTTP/1.1 200 OK
-Server: nginx/1.30.4
-
-Evidencia guardada en:
-- `evidence/baseline/nginx_status.txt`
-- `evidence/baseline/curl_nginx_default.txt`
-
-![alt text](evidence/img/nginx.png)
-
-**Paso 3 — Creación de la aplicación mínima**
-
-Se creó un sitio estático ficticio sin autenticación, con dos archivos dentro
-de `app/` (fuente de verdad en el repo, luego copiados al servidor):
-
-`app/index.html` — página principal del portal ficticio MuvAutomation:
-
-```html
-<!doctype html>
-<html lang="es">
-<head><meta charset="utf-8"><title>MuvAutomation Lab</title></head>
-<body>
- <h1>MuvAutomation Asset Portal</h1>
- <p>Environment: LAB</p>
- <p>Owner: Blue Team</p>
- <a href="/public-inventory.txt">Inventario público de demostración</a>
-</body>
-</html>
-```
-
-`app/public-inventory.txt` — inventario ficticio de activos.
+## Limitaciones de seguridad conocidas
+- Servicio HTTP sin cifrado (sin TLS) — se corrige en Laboratorio 4.
+- Sin autenticación ni autorización — se corrige en Laboratorio 4.
+- (se completa tras el modelo de amenazas, sección 8)
 

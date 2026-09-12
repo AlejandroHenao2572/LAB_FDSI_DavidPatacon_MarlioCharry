@@ -1,3 +1,14 @@
+=== timestamp ===
+2026-09-12T20:44:53Z
+=== curl -I ===
+HTTP/1.0 200 OK
+Server: SimpleHTTP/0.6 Python/3.14.7
+Date: Sat, 12 Sep 2026 20:44:53 GMT
+Content-type: text/html
+Content-Length: 348
+Last-Modified: Sat, 12 Sep 2026 20:40:50 GMT
+
+=== curl body ===
 <!doctype html>
 <html lang="es">
 <head><meta charset="utf-8"><title>CrowdStrike Falcon - Incident Automation Lab</title></head>
