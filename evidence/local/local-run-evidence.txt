@@ -1,0 +1,47 @@
+=== git status ===
+On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	evidence/local/local-run-evidence.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+=== git log ===
+4c015fe lab3: estructura del repo, README y app copiada del servidor
+d08510a Fase A paso 3
+9c4a684 Fase A paso 2
+9b40b94 Fase A paso 1
+b0258b0 inital lab3 config
+=== find ===
+./.git/hooks/applypatch-msg.sample
+./.git/hooks/commit-msg.sample
+./.git/hooks/fsmonitor-watchman.sample
+./.git/hooks/post-update.sample
+./.git/hooks/pre-applypatch.sample
+./.git/hooks/pre-commit.sample
+./.git/hooks/pre-merge-commit.sample
+./.git/hooks/pre-push.sample
+./.git/hooks/pre-rebase.sample
+./.git/hooks/pre-receive.sample
+./.git/hooks/prepare-commit-msg.sample
+./.git/hooks/push-to-checkout.sample
+./.git/hooks/sendemail-validate.sample
+./.git/hooks/update.sample
+./.git/info/exclude
+./.git/description
+./.git/COMMIT_EDITMSG
+./.git/logs/HEAD
+./.git/FETCH_HEAD
+./.git/config
+./.git/ORIG_HEAD
+./.git/REBASE_HEAD
+./.git/HEAD
+./.git/index
+./app/index.html
+./app/alerts-inventory.json
+./nginx/crowdstrike-lab.conf
+./evidence/local/http-server-test.txt
+./evidence/local/local-run-evidence.txt
+./README.md
