@@ -1,17 +1,33 @@
 # CrowdStrike Falcon - Incident Automation Lab
 
+## Portada
+
+| Campo | Detalle |
+|---|---|
+| Universidad | [COMPLETAR] |
+| Facultad / Programa | [COMPLETAR] |
+| Asignatura | Fundamentos de Seguridad de la Información (FDSI) |
+| Docente | [COMPLETAR] |
+| Grupo / Código de curso | [COMPLETAR] |
+| Laboratorio | Laboratorio 3 — Secure Product Challenge |
+| Integrantes | David Alejandro Patacón Henao<br>Marlio Jose Charry Espitia |
+| Fecha de entrega | [COMPLETAR] |
+
 Laboratorio 3 (Secure Product Challenge) de la asignatura FDSI. Prototipo académico que simula la recepción y consulta de alertas de seguridad de CrowdStrike Falcon mediante un servicio HTTP público sin autenticación, como línea base deliberadamente insegura para el ciclo Construir → Atacar → Detectar → Corregir → Verificar.
 
-## Integrantes
+## Descripción del proyecto
 
-- David Alejandro Patacón Henao
-- Marlio Charry
+**Problema seleccionado.** Actualmente la recepción, clasificación y escalamiento de alertas de seguridad requiere actividades manuales que aumentan los tiempos de respuesta y dificultan la correlación de evidencias.
 
-## Propósito
+**Objetivo de la primera versión.** Exponer un endpoint HTTP mínimo que sirva un portal de bienvenida y un inventario de alertas ficticias, para validar el flujo completo de despliegue (repositorio → servidor → Nginx) antes de incorporar controles de seguridad (TLS, autenticación, RBAC) en laboratorios posteriores.
 
-Actualmente la recepción, clasificación y escalamiento de alertas de seguridad requiere actividades manuales que aumentan los tiempos de respuesta y dificultan la correlación de evidencias. Este prototipo construye una base mínima que recibe alertas ficticias de CrowdStrike Falcon y permite consultarlas mediante un endpoint HTTP, registrando cada acción para su posterior análisis.
+**Usuarios previstos.** Analista de seguridad (consulta alertas) y Blue Team (observa/audita el servicio); ver `risk-register.md` para el detalle completo de actores.
 
-**No se utiliza información real ni se integra con la API real de CrowdStrike.** Todos los datos (alertas, endpoints, IDs) son ficticios.
+**Datos ficticios que utilizará.** `app/alerts-inventory.json` contiene tres alertas inventadas (`alert_id`, `severity`, `status`, `endpoint`, p. ej. `ALERT-LAB-01`). No se usa información real ni se integra con la API real de CrowdStrike. Todos los datos (alertas, endpoints, IDs) son ficticios.
+
+**Alcance y exclusiones.** Ver "Alcance de esta entrega" a continuación.
+
+**Resultado esperado del despliegue.** Portal accesible por HTTP en la red del laboratorio (`http://192.168.56.102/`), sirviendo `index.html` y `alerts-inventory.json` con código `200 OK`, verificado con `curl` tanto en ejecución local como en el servidor Nginx (ver "Evidencias").
 
 ## Alcance de esta entrega
 
@@ -45,18 +61,20 @@ LAB_FDSI_DavidPatacon_MarlioCharry/
 ├── nginx/
 │   └── crowdstrike-lab.conf        # Virtual host desplegado en el servidor
 ├── diagrams/
-│   └── dfd-lab3.png / .drawio      # DFD del sistema
+│   └── dfd-lab3.png                 # DFD del sistema
 ├── evidence/
 │   ├── local/
-│   │   ├── http-server-test.txt        # Prueba local (python3 -m http.server)
-│   │   └── local-run-evidence.txt      # git status / git log / find
+│   │   ├── http-server-test.txt              # Prueba local (python3 -m http.server)
+│   │   └── local-run-evidence.txt            # git status / git log / find
 │   └── server/
-│       ├── nginx-server-evidence.txt   # hostname, nginx -v, systemctl status, nginx -t, curl -I, timestamp
-│       ├── nginx-config.txt            # Configuración real aplicada
-│       ├── dir-permissions.txt         # Permisos de /var/www/crowdstrike-lab
-│       ├── access-log-extract.txt      # Extracto de access.log
-│       ├── error-log-extract.txt       # Extracto de error.log
-│       └── stride-evidence.txt         # Evidencia puntual del modelo de amenazas
+│       ├── nginx-server-evidence.txt         # hostname, nginx -v, systemctl status, nginx -t, curl -I, timestamp
+│       ├── nginx-config.txt                  # Configuración real aplicada
+│       ├── dir-permissions.txt               # Permisos de /var/www/crowdstrike-lab
+│       ├── access-log-extract.txt            # Extracto de access.log
+│       ├── error-log-extract.txt             # Extracto de error.log
+│       ├── stride-evidence.txt               # Evidencia puntual del modelo de amenazas
+│       ├── screenshot-browser-home.png       # Captura: navegador mostrando el portal
+│       └── screenshot-browser-alerts-json.png # Captura: navegador mostrando alerts-inventory.json
 ├── risk-register.md                # Activos, actores, límites de confianza y tabla STRIDE
 └── README.md
 ```
@@ -129,39 +147,9 @@ Evidencia completa de este procedimiento (versión de Nginx, estado del servicio
 
 Análisis STRIDE completo (activos, actores, límites de confianza, superficie de ataque y la tabla de riesgos con evidencia y mitigación propuesta), construido directamente sobre los elementos del DFD (`diagrams/dfd-lab3.png`).
 
-## Registro de riesgos 
+## Registro de riesgos
 
-## Activos
-- index.html, alerts-inventory.json
-- Configuración de Nginx
-- Logs (access.log / error.log)
-- Disponibilidad del servicio HTTP
-
-## Actores
-- Analista de seguridad (legítimo)
-- Atacante / Red Team (adversario)
-- Blue Team (observador/defensor)
-
-## Límites de confianza
-1. Red del laboratorio (192.168.56.0/24) <-> Servidor Ubuntu
-2. Proceso Nginx <-> Sistema de archivos/logs del host
-
-## Superficie de ataque
-- TCP/80 abierto en 192.168.56.102
-- Endpoints / y /alerts-inventory.json
-- Headers HTTP (banner de versión)
-- SSH (22) en el mismo segmento
-
-## Tabla STRIDE
-
-| STRIDE | Riesgo | Evidencia | Mitigación propuesta | Estado |
-|---|---|---|---|---|
-| Spoofing | Sin autenticación, cualquier host del segmento consulta el servicio | curl sin credenciales responde 200 OK | API key / mTLS / JWT | Pendiente Lab 4 |
-| Tampering | Sin TLS, tráfico alterable en tránsito | curl -v muestra contenido en texto plano | HTTPS TLS 1.3, checksum de integridad | Pendiente Lab 4 |
-| Repudiation | No se atribuye una consulta a un analista específico | access.log solo registra IP y método | Autenticación + logging con identidad | Pendiente Lab 4 |
-| Information Disclosure | alerts-inventory.json expone datos sin control de acceso; version de Nginx visible | curl -I revela header Server; curl expone el JSON completo | server_tokens off, autenticación del endpoint | Mitigado parcialmente |
-| Denial of Service | Sin limit_req, agotamiento de recursos posible | grep limit_req sin resultados en la config | limit_req_zone, WAF (Lab 6) | Aceptado por ahora |
-| Elevation of Privilege | Sin roles, riesgo futuro al integrar API real de Falcon | curl -X POST devuelve 405 Method Not Allowed | RBAC y separación de roles | Pendiente Lab 4 |
+Detalle completo (activos, actores, límites de confianza, superficie de ataque y tabla STRIDE con evidencia y mitigación) en [`risk-register.md`](risk-register.md).
 
 Resumen de hallazgos: 4 riesgos pendientes para el Laboratorio 4 (Spoofing, Tampering, Repudiation, Elevation of Privilege — todos derivados de la ausencia de TLS y autenticación), 1 mitigado parcialmente en este laboratorio (Information Disclosure, mediante `server_tokens off`), y 1 aceptado temporalmente (Denial of Service, sin `limit_req`, previsto para el Laboratorio 6).
 
@@ -288,9 +276,20 @@ drwxr-xr-x 4 root root 4096 Sep 12 20:30 ..
 ```
 
 ### Evidencia servidor corriendo en la VM
-![alt text](evidence/img/imagen1.png)
+![Navegador mostrando el portal en http://192.168.56.102/](evidence/server/screenshot-browser-home.png)
 
-![alt text](evidence/img/imagen2.png)
+![Navegador mostrando alerts-inventory.json en http://192.168.56.102/alerts-inventory.json](evidence/server/screenshot-browser-alerts-json.png)
+
+### Diagnóstico del fallo
+
+No aplica: el despliegue fue exitoso en todos los pasos verificados.
+
+| Prueba | Esperado | Obtenido | Evidencia |
+|---|---|---|---|
+| `curl localhost` (servidor) | HTTP 200 | HTTP 200 | `evidence/server/nginx-server-evidence.txt` |
+| `nginx -t` | Syntax OK | Syntax OK | `evidence/server/nginx-server-evidence.txt` |
+| Acceso desde la red del laboratorio | Página visible | Página visible | `evidence/server/screenshot-browser-home.png` |
+| Carga de contenido (JSON) | HTTP 200 | HTTP 200 | `evidence/server/screenshot-browser-alerts-json.png` |
 
 ### Modelo de amenazas
 

@@ -1,0 +1,21 @@
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archivos temporales / backup
+*.tmp
+*.bak
+*~
+
+# Secretos (defensivo, no deberían existir en este repo)
+.env
+.env.*
+*.pem
+*.key
+credentials*.json
