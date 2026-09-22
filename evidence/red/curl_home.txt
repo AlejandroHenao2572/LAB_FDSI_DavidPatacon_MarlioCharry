@@ -1,0 +1,20 @@
+HTTP/1.1 200 OK
+Server: nginx/1.28.3 (Ubuntu)
+Date: Tue, 22 Sep 2026 00:44:34 GMT
+Content-Type: text/html
+Content-Length: 285
+Last-Modified: Tue, 22 Sep 2026 00:01:45 GMT
+Connection: keep-alive
+ETag: "6ab1c569-11d"
+Accept-Ranges: bytes
+
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>MuvAutomation Lab</title></head>
+<body>
+ <h1>MuvAutomation Asset Portal</h1>
+ <p>Environment: LAB</p>
+ <p>Owner: Blue Team</p>
+ <a href="/public-inventory.txt">Inventario público de demostración</a>
+</body>
+</html>

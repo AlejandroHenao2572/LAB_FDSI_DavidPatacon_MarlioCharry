@@ -1,0 +1,4 @@
+# Nmap 7.99 scan initiated Tue Sep 22 00:54:53 2026 as: /usr/lib/nmap/nmap --privileged -Pn -sV -p 80 -oA evidence/retest/nmap_port80 44.206.197.137
+Host: 44.206.197.137 (ec2-44-206-197-137.compute-1.amazonaws.com)	Status: Up
+Host: 44.206.197.137 (ec2-44-206-197-137.compute-1.amazonaws.com)	Ports: 80/open/tcp//http//nginx/
+# Nmap done at Tue Sep 22 00:55:02 2026 -- 1 IP address (1 host up) scanned in 9.52 seconds
