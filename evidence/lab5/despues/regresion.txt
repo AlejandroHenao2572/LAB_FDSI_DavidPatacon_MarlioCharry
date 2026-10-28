@@ -1,0 +1,18 @@
+OK   /  Content-Security-Policy: .*default-src 'none'.*frame-ancestors 'none'
+OK   /  Permissions-Policy: 
+OK   /  Cross-Origin-Embedder-Policy: require-corp
+OK   /  X-Content-Type-Options: nosniff
+OK   /public-inventory.txt  Content-Security-Policy: .*default-src 'none'.*frame-ancestors 'none'
+OK   /public-inventory.txt  Permissions-Policy: 
+OK   /public-inventory.txt  Cross-Origin-Embedder-Policy: require-corp
+OK   /public-inventory.txt  X-Content-Type-Options: nosniff
+OK   /no-existe  Content-Security-Policy: .*default-src 'none'.*frame-ancestors 'none'
+OK   /no-existe  Permissions-Policy: 
+OK   /no-existe  Cross-Origin-Embedder-Policy: require-corp
+OK   /no-existe  X-Content-Type-Options: nosniff
+OK   /.git/config  Content-Security-Policy: .*default-src 'none'.*frame-ancestors 'none'
+OK   /.git/config  Permissions-Policy: 
+OK   /.git/config  Cross-Origin-Embedder-Policy: require-corp
+OK   /.git/config  X-Content-Type-Options: nosniff
+OK   /  Server: nginx\s*$
+OK   /.git/config 403
