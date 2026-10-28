@@ -28,7 +28,7 @@ Identificación del alcance → SAST (Semgrep) → detección de secretos (Gitle
 - **Título:** GitHub Actions referenciadas por tag mutable
 - **Categoría OWASP/CWE:** A08:2021 Software and Data Integrity Failures / CWE-829
 - **Severidad y justificación:** Media. Ataque de cadena de suministro real y documentado (tj-actions/changed-files, 2025); el job tiene `GITHUB_TOKEN`.
-- **Evidencia minimizada:** Semgrep `github-actions-mutable-action-tag` ×5 y `dependabot-missing-cooldown` ×1 (`evidence/lab5/antes/semgrep.txt`).
+- **Evidencia minimizada:** Semgrep `github-actions-mutable-action-tag` ×6 y `dependabot-missing-cooldown` ×1 (`evidence/lab5/antes/semgrep.txt`).
 - **Impacto:** Integridad del código y del pipeline; Confidencialidad del token.
 - **Pasos de validación segura:** revisión estática de `.github/workflows/*.yml`; no se requiere explotación.
 - **Corrección:** PR #2: SHA de 40 caracteres resuelto con `gh api repos/<owner>/<repo>/commits/<tag>`, comentario con la versión, y `cooldown` en `dependabot.yml`.

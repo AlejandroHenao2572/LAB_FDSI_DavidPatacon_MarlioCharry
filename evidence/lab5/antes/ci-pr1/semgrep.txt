@@ -1,0 +1,86 @@
+                    
+                    
+┌──────────────────┐
+│ 21 Code Findings │
+└──────────────────┘
+                          
+    .github/dependabot.yml
+    ❯❱ package_managers.dependabot.dependabot-missing-cooldown.dependabot-missing-cooldown
+          ❰❰ Blocking ❱❱
+          This Dependabot configuration does not set a cooldown period. Newly published packages can be     
+          malicious or unstable. Add a `cooldown` block with `default-days: 7` to each `package-ecosystem`  
+          entry under `updates` to wait 7 days before proposing updates to newly published package versions.
+          Reference: https://docs.github.com/en/code-security/dependabot/dependabot-version-                
+          updates/configuration-options-for-the-dependabot.yml-file#cooldown                                
+          Details: https://sg.run/5WvGK                                                                     
+                                                                                                            
+            4┆ - package-ecosystem: github-actions
+            5┆   directory: /
+            6┆   schedule:
+            7┆     interval: weekly
+                                      
+    .github/workflows/dast-staging.yml
+    ❯❱ yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+          ❰❰ Blocking ❱❱
+          GitHub Actions step uses a mutable tag or branch reference. Tags and branch names can be silently   
+          repointed by the action owner, enabling supply-chain attacks — as seen in the trivy-action and kics-
+          github-action compromises. Pin the reference to a full 40-character commit SHA instead, e.g. `uses: 
+          actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608`.                                         
+          Details: https://sg.run/2LgAL                                                                       
+                                                                                                              
+           26┆ - uses: actions/upload-artifact@v4
+                                            
+    .github/workflows/seguridad-estatica.yml
+    ❯❱ yaml.github-actions.security.github-actions-mutable-action-tag.github-actions-mutable-action-tag
+          ❰❰ Blocking ❱❱
+          GitHub Actions step uses a mutable tag or branch reference. Tags and branch names can be silently   
+          repointed by the action owner, enabling supply-chain attacks — as seen in the trivy-action and kics-
+          github-action compromises. Pin the reference to a full 40-character commit SHA instead, e.g. `uses: 
+          actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608`.                                         
+          Details: https://sg.run/2LgAL                                                                       
+                                                                                                              
+           18┆ - uses: actions/checkout@v4
+            ⋮┆----------------------------------------
+           22┆ - uses: actions/upload-artifact@v4
+            ⋮┆----------------------------------------
+           31┆ - uses: actions/checkout@v4
+            ⋮┆----------------------------------------
+           38┆ - uses: actions/checkout@v4
+            ⋮┆----------------------------------------
+           41┆ - uses: gitleaks/gitleaks-action@v2
+                                       
+    evidence/lab5/antes/zap-report.html
+    ❯❱ html.security.plaintext-http-link.plaintext-http-link
+          ❰❰ Blocking ❱❱
+          This link points to a plaintext HTTP URL. Prefer an encrypted HTTPS URL if possible.
+          Details: https://sg.run/RA5q                                                        
+                                                                                              
+          508┆ <td width="80%"><a href="http://staging/">http://staging/</a></td>
+            ⋮┆----------------------------------------
+          544┆ <td width="80%"><a href="http://staging/robots.txt">http://staging/robots.txt</a></td>
+            ⋮┆----------------------------------------
+          580┆ <td width="80%"><a href="http://staging/sitemap.xml">http://staging/sitemap.xml</a></td>
+            ⋮┆----------------------------------------
+          690┆ <td width="80%"><a href="http://staging/">http://staging/</a></td>
+            ⋮┆----------------------------------------
+          785┆ <td width="80%"><a href="http://staging/">http://staging/</a></td>
+            ⋮┆----------------------------------------
+          883┆ <td width="80%"><a href="http://staging/">http://staging/</a></td>
+            ⋮┆----------------------------------------
+          919┆ <td width="80%"><a href="http://staging/public-inventory.txt">http://staging/public-
+               inventory.txt</a></td>                                                              
+            ⋮┆----------------------------------------
+          1020┆ <td width="80%"><a href="http://staging/">http://staging/</a></td>
+            ⋮┆----------------------------------------
+          1056┆ <td width="80%"><a href="http://staging/robots.txt">http://staging/robots.txt</a></td>
+            ⋮┆----------------------------------------
+          1092┆ <td width="80%"><a href="http://staging/sitemap.xml">http://staging/sitemap.xml</a></td>
+            ⋮┆----------------------------------------
+          1196┆ <td width="80%"><a href="http://staging/">http://staging/</a></td>
+            ⋮┆----------------------------------------
+          1235┆ <td width="80%"><a href="http://staging/public-inventory.txt">http://staging/public-
+               inventory.txt</a></td>                                                               
+            ⋮┆----------------------------------------
+          1274┆ <td width="80%"><a href="http://staging/robots.txt">http://staging/robots.txt</a></td>
+            ⋮┆----------------------------------------
+          1313┆ <td width="80%"><a href="http://staging/sitemap.xml">http://staging/sitemap.xml</a></td>

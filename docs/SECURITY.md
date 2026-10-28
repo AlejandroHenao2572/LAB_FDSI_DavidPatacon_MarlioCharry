@@ -20,7 +20,7 @@
 | OWASP ZAP Baseline (local) | DAST pasivo | 2026-10-28 | 4 WARN → 1 WARN | `evidence/lab5/antes/zap-report.html`, `evidence/lab5/despues/zap-report.html` |
 
 ### Interpretación SAST (dos resultados)
-1. `github-actions-mutable-action-tag` (5 ocurrencias) — **verdadero positivo**. `uses: actions/checkout@v4` apunta a un tag que el dueño puede mover; un tag comprometido ejecutaría código arbitrario en nuestro CI (casos reales: tj-actions, trivy-action). Corregido fijando SHA.
+1. `github-actions-mutable-action-tag` (6 ocurrencias en CI) — **verdadero positivo**. `uses: actions/checkout@v4` apunta a un tag que el dueño puede mover; un tag comprometido ejecutaría código arbitrario en nuestro CI (casos reales: tj-actions, trivy-action). Corregido fijando SHA.
 2. `dependabot-missing-cooldown` — **verdadero positivo, severidad baja**. Sin espera, Dependabot propondría versiones recién publicadas (posible paquete malicioso). Corregido con `cooldown.default-days: 7`.
 
 **Falsos positivos de Semgrep en CI (artefacto `resultado-semgrep` del PR #1):** 14× `plaintext-http-link` en `evidence/lab5/antes/zap-report.html`. Son enlaces a `http://staging/`, la URL del contenedor de prueba, dentro de nuestro propio reporte ZAP, no código desplegado. Decisión: excluir `evidence/` y `GUIA_LAB_5/` con `.semgrepignore`.
