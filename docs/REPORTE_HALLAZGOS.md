@@ -32,7 +32,7 @@ Identificación del alcance → SAST (Semgrep) → detección de secretos (Gitle
 - **Impacto:** Integridad del código y del pipeline; Confidencialidad del token.
 - **Pasos de validación segura:** revisión estática de `.github/workflows/*.yml`; no se requiere explotación.
 - **Corrección:** PR #2: SHA de 40 caracteres resuelto con `gh api repos/<owner>/<repo>/commits/<tag>`, comentario con la versión, y `cooldown` en `dependabot.yml`.
-- **Resultado del reescaneo:** Semgrep 6 → 0 hallazgos.
+- **Resultado del reescaneo:** Semgrep en CI 21 → 0 (7 verdaderos positivos corregidos; 14 falsos positivos en archivos de evidencia excluidos con `.semgrepignore`).
 
 ## Hallazgo F-03 (falsa alarma / aceptado)
 - ZAP 10049 *Storable and Cacheable Content*: el contenido es público y ficticio; el cacheo no expone información. Se acepta sin cambios.

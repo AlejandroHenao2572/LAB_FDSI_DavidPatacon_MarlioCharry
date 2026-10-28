@@ -13,7 +13,7 @@
 ## 2. Línea base y herramientas
 | Herramienta | Tipo | Fecha | Resultado | Enlace a evidencia |
 |---|---|---|---|---|
-| Semgrep (`p/default` + `r/generic.nginx`) | SAST | 2026-10-28 | 6 hallazgos → 0 tras corrección | `evidence/lab5/antes/semgrep.txt`, `evidence/lab5/despues/semgrep.txt`, artefacto `resultado-semgrep` |
+| Semgrep (`p/default` + `r/generic.nginx`) | SAST | 2026-10-28 | CI PR #1: 21 (7 verdaderos + 14 falsos positivos) → 0 tras corrección y triage | `evidence/lab5/antes/semgrep.txt`, `evidence/lab5/despues/semgrep.txt`, artefacto `resultado-semgrep` |
 | CodeQL Default setup | SAST | — | Pendiente de habilitar en Settings (ver §6) | captura |
 | Gitleaks (historial completo) | Secretos | 2026-10-28 | 0 secretos en 13/14 commits | `evidence/lab5/antes/gitleaks.txt`, `evidence/lab5/despues/gitleaks.txt`, job `gitleaks` |
 | Dependabot (`github-actions`) | SCA | 2026-10-28 | Sin manifiestos de paquetes; se monitorean las Actions | `.github/dependabot.yml` |
@@ -22,6 +22,9 @@
 ### Interpretación SAST (dos resultados)
 1. `github-actions-mutable-action-tag` (5 ocurrencias) — **verdadero positivo**. `uses: actions/checkout@v4` apunta a un tag que el dueño puede mover; un tag comprometido ejecutaría código arbitrario en nuestro CI (casos reales: tj-actions, trivy-action). Corregido fijando SHA.
 2. `dependabot-missing-cooldown` — **verdadero positivo, severidad baja**. Sin espera, Dependabot propondría versiones recién publicadas (posible paquete malicioso). Corregido con `cooldown.default-days: 7`.
+
+**Falsos positivos de Semgrep en CI (artefacto `resultado-semgrep` del PR #1):** 14× `plaintext-http-link` en `evidence/lab5/antes/zap-report.html`. Son enlaces a `http://staging/`, la URL del contenedor de prueba, dentro de nuestro propio reporte ZAP, no código desplegado. Decisión: excluir `evidence/` y `GUIA_LAB_5/` con `.semgrepignore`.
+**Limitación de la herramienta:** 2 errores `PartialParsing` en `dast-staging.yml:17`: el parser Bash de Semgrep no interpreta el patrón `case ... https://*)`; ese bloque quedó parcialmente sin analizar.
 
 **Falsa alarma / riesgo aceptado:** ZAP `10049 Storable and Cacheable Content` — el contenido es público y ficticio; que proxies lo almacenen no expone nada. Se acepta.
 
