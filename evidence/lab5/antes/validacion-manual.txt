@@ -1,0 +1,1 @@
+Sin CSP ni Permissions-Policy (hipotesis validada)

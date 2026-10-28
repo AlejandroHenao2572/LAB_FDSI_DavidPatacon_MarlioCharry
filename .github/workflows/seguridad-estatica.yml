@@ -1,0 +1,43 @@
+name: Seguridad estatica - SAST y secretos
+
+on:
+  pull_request:
+  push:
+    branches: [main, security/lab-fsi]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  semgrep:
+    name: SAST (Semgrep)
+    runs-on: ubuntu-latest
+    container: semgrep/semgrep
+    steps:
+      - uses: actions/checkout@v4
+      # ponytail: "|| true" no bloquea el primer laboratorio; quitarlo tras el triage.
+      - run: semgrep scan --config p/default --config r/generic.nginx --json --output semgrep.json || true
+      - run: semgrep scan --config p/default --config r/generic.nginx --text --output semgrep.txt || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: resultado-semgrep
+          path: semgrep.*
+
+  regresion-headers:
+    name: Regresion headers nginx
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: tests/headers.sh
+
+  gitleaks:
+    name: Secretos (Gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # historial completo: los secretos borrados siguen en commits viejos
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

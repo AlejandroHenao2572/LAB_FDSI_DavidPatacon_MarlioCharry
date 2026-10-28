@@ -1,0 +1,12 @@
+HTTP/1.1 200 OK
+Server: nginx
+Date: Wed, 28 Oct 2026 22:42:52 GMT
+Content-Type: text/html
+Content-Length: 285
+Last-Modified: Tue, 22 Sep 2026 04:04:06 GMT
+Connection: keep-alive
+ETag: "6ab1fe36-11d"
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Referrer-Policy: no-referrer
+Accept-Ranges: bytes
