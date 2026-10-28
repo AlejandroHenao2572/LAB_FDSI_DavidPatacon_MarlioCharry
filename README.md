@@ -65,3 +65,11 @@ Este laboratorio nos permitió ver de primera mano por qué HTTP sin cifrado y s
 El hardening aplicado (ocultar versión de servidor, headers de seguridad, bloquear rutas ocultas) redujo información expuesta de forma medible y verificable con un retest, pero no resolvió el problema de fondo: la falta de cifrado. Eso deja claro que la seguridad se construye en capas y de forma incremental, en vez de intentar resolver todo de una vez.
 
 Trabajar con roles separados (Red/Blue), nos ayudó a pensar diferente en cada fase: atacar buscando información vs. defender correlacionando evidencia.
+
+## Laboratorio 5 — Seguridad en el ciclo de desarrollo
+
+![Seguridad estatica](https://github.com/AlejandroHenao2572/LAB_FDSI_DavidPatacon_MarlioCharry/actions/workflows/seguridad-estatica.yml/badge.svg)
+
+- [Informe de seguridad](docs/SECURITY.md) · [Reporte de hallazgos](docs/REPORTE_HALLAZGOS.md) · [Checklist PR](docs/CHECKLIST_PR.md)
+- Prueba de regresión: `tests/headers.sh` (requiere Docker).
+- Evidencia: `evidence/lab5/antes/` y `evidence/lab5/despues/`.
