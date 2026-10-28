@@ -1,0 +1,29 @@
+name: DAST pasivo - staging autorizado
+
+# Solo manual. STAGING_URL debe ser un sistema propio y autorizado: el pipeline no verifica titularidad.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  zap-baseline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validar STAGING_URL
+        env:
+          STAGING_URL: ${{ vars.STAGING_URL }}
+        run: |
+          case "$STAGING_URL" in https://*) ;; *) echo "STAGING_URL vacia o no HTTPS"; exit 1;; esac
+      - name: ZAP Baseline (pasivo)
+        env:
+          STAGING_URL: ${{ vars.STAGING_URL }}
+        run: |
+          mkdir -p zap && chmod 777 zap
+          docker run --rm -v "$PWD/zap:/zap/wrk:rw" ghcr.io/zaproxy/zaproxy:stable \
+            zap-baseline.py -t "$STAGING_URL" -r zap-report.html -J zap-report.json -I || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: informe-zap
+          path: zap/

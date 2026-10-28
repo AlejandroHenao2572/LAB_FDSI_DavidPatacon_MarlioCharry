@@ -1,0 +1,7 @@
+version: 2
+updates:
+  # Unicas dependencias de terceros versionadas en el repo: las Actions de los workflows.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

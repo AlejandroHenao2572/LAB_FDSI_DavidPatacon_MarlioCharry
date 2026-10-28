@@ -1,0 +1,18 @@
+FAIL /  Content-Security-Policy: .*default-src 'none'.*frame-ancestors 'none'
+FAIL /  Permissions-Policy: 
+FAIL /  Cross-Origin-Embedder-Policy: require-corp
+OK   /  X-Content-Type-Options: nosniff
+FAIL /public-inventory.txt  Content-Security-Policy: .*default-src 'none'.*frame-ancestors 'none'
+FAIL /public-inventory.txt  Permissions-Policy: 
+FAIL /public-inventory.txt  Cross-Origin-Embedder-Policy: require-corp
+OK   /public-inventory.txt  X-Content-Type-Options: nosniff
+FAIL /no-existe  Content-Security-Policy: .*default-src 'none'.*frame-ancestors 'none'
+FAIL /no-existe  Permissions-Policy: 
+FAIL /no-existe  Cross-Origin-Embedder-Policy: require-corp
+OK   /no-existe  X-Content-Type-Options: nosniff
+FAIL /.git/config  Content-Security-Policy: .*default-src 'none'.*frame-ancestors 'none'
+FAIL /.git/config  Permissions-Policy: 
+FAIL /.git/config  Cross-Origin-Embedder-Policy: require-corp
+OK   /.git/config  X-Content-Type-Options: nosniff
+OK   /  Server: nginx\s*$
+OK   /.git/config 403
