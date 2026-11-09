@@ -19,3 +19,8 @@ desktop.ini
 *.pem
 *.key
 credentials*.json
+
+# Material del curso (no se versiona)
+Kit_Integracion_AppSec_GitHub_FDSI/
+Laboratorio_Integrador_AppSec_FDSI.pdf
+CLAUDE.md
