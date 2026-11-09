@@ -58,16 +58,33 @@ Dependencia analizada: **`actions/upload-artifact@v4`** (3 versiones mayores atr
 ## 3. Hallazgos y gestión
 | ID | Categoría | Descripción sin secretos | Riesgo | Archivo/ruta | Cambio propuesto | Estado |
 |---|---|---|---|---|---|---|
-| F-01 | CWE-829 / OWASP A08 (integridad de software) | Acciones de GitHub referenciadas por etiqueta mutable (`@v3`, `@v4`) en lugar de un SHA de commit | Medio (integridad del pipeline) | `.github/workflows/*.yml` | Fijar cada `uses:` a un SHA completo y dejar que Dependabot lo actualice | Abierto |
-| F-02 | CWE-1104 (componentes sin mantenimiento) / OWASP A06 | Acciones de CI con 2–3 versiones mayores de atraso, sin un CVE conocido | Bajo | `.github/workflows/*.yml` | Actualizar a la última versión mayor compatible y activar Dependabot version updates | Abierto |
-| F-03 | CWE-693 / OWASP A05 (configuración) | Falta el header `Content-Security-Policy` en todas las respuestas, incluidos los errores 404 | Medio | `nginx/muvautomation.conf` | Agregar una CSP restrictiva (`default-src 'self'`) con `always` | Abierto |
-| F-04 | CWE-693 / OWASP A05 | Faltan `Permissions-Policy`, `Cross-Origin-Opener-Policy`, `Cross-Origin-Embedder-Policy` y `Cross-Origin-Resource-Policy` | Bajo | `nginx/muvautomation.conf` | Agregar los headers con valores restrictivos | Abierto |
+| F-01 | CWE-829 / OWASP A08 (integridad de software) | Acciones de GitHub referenciadas por etiqueta mutable (`@v3`, `@v4`) en lugar de un SHA de commit | Medio (integridad del pipeline) | `.github/workflows/*.yml` | Fijar cada `uses:` a un SHA completo y dejar que Dependabot lo actualice | Corregido (PR de remediación) |
+| F-02 | CWE-1104 (componentes sin mantenimiento) / OWASP A06 | Acciones de CI con 2–3 versiones mayores de atraso, sin un CVE conocido | Bajo | `.github/workflows/*.yml` | Actualizar a la última versión mayor compatible y activar Dependabot version updates | Corregido (PR de remediación) |
+| F-03 | CWE-693 / OWASP A05 (configuración) | Falta el header `Content-Security-Policy` en todas las respuestas, incluidos los errores 404 | Medio | `nginx/muvautomation.conf` | Agregar una CSP restrictiva (`default-src 'self'`) con `always` | Corregido (PR de remediación) |
+| F-04 | CWE-693 / OWASP A05 | Faltan `Permissions-Policy`, `Cross-Origin-Opener-Policy`, `Cross-Origin-Embedder-Policy` y `Cross-Origin-Resource-Policy` | Bajo | `nginx/muvautomation.conf` | Agregar los headers con valores restrictivos | Corregido (PR de remediación) |
+| F-05 | CWE-1357 (dependencia de componente no confiable) | `dependabot.yml` sin `cooldown`: una versión nueva (posiblemente comprometida) se propondría el mismo día de su publicación. Lo detectó Semgrep en el reescaneo. | Bajo | `.github/dependabot.yml` | `cooldown.default-days: 7` | Corregido (PR de remediación) |
 
 ## 4. Validación antes y después
-- Evidencia inicial (captura o artefacto):
-- Pull request con corrección:
-- Evidencia de reescaneo:
-- Riesgo residual y decisión:
+| Control | Antes | Después | Evidencia |
+|---|---|---|---|
+| Semgrep | 6 resultados (`mutable-action-tag`) | 0 resultados | `semgrep-antes.json` → `semgrep-despues.json` |
+| ZAP Baseline | 4 reglas WARN (CSP Medio + 3 Bajo + 1 Info) | 1 regla WARN (solo la informativa, riesgo aceptado); 67 reglas pasan | `zap-antes.html` → `zap-despues.html` |
+| Pentest `curl` | CSP ausente en las 4 rutas | CSP presente en las 4 rutas (incluidos 404 y 403) | `pentest-antes.txt` → `pentest-despues.txt` |
+| Prueba en el navegador | Script inline se ejecuta | El navegador lo bloquea (violación de CSP) | `pentest-csp-antes.png` → `pentest-csp-despues.png` |
+| Prueba de regresión | `exit=1` con varios FALLA | `OK: todos los controles presentes` | `regresion-antes.txt` → `regresion-despues.txt` |
+| Acciones de CI | Etiquetas `@v3`/`@v4`/`@v5` | SHA fijo de v7.x / v3.0.0 | `.github/workflows/*.yml` |
+
+- **Corrección:**
+  - `nginx/muvautomation.conf`: CSP, Permissions-Policy, COOP, COEP y CORP, todos con `always`.
+  - Workflows: acciones fijadas por SHA, con la versión en un comentario para que Dependabot pueda actualizarlas.
+  - `dependabot.yml` con cooldown.
+  - `.semgrepignore` excluye `evidence/`, porque los reportes HTML de ZAP generaban 16 falsos positivos `plaintext-http-link`.
+- **Prueba de regresión:** `scripts/test-headers.sh` levanta Nginx con la configuración del repositorio. Falla si falta algún header de seguridad, si `Server` expone la versión o si `/.git/config` deja de devolver 403. Se ejecuta en cada PR como el job `Regresión de headers (Nginx)` del workflow `seguridad-estatica.yml`.
+- **Pull request con corrección:** rama `security/remediacion` → `main` (enlace al agregarlo).
+- **Riesgo residual y decisión:**
+  - **H1 y H4 del Lab 3 (sin TLS):** siguen abiertos. La CSP no protege contenido que viaja en claro. Pendiente: HTTPS y HSTS.
+  - **Caché de contenido público:** riesgo aceptado.
+  - **Despliegue al servidor:** la CSP debe aplicarse en el servidor real con `nginx -t && systemctl reload nginx`.
 
 ## 5. Pentest autorizado
 - **Hipótesis (F-03):** el servidor no envía `Content-Security-Policy` en ninguna respuesta. Por eso el navegador ejecutaría cualquier script inline o externo que llegara a la página, y no hay una segunda barrera contra XSS.
