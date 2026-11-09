@@ -5,3 +5,6 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    # Espera 7 días antes de proponer una versión nueva: si se publica una versión comprometida, suele detectarse antes.
+    cooldown:
+      default-days: 7
