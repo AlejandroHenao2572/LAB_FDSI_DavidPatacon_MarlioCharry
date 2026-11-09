@@ -1,0 +1,7 @@
+version: 2
+updates:
+  # Las únicas dependencias de terceros del proyecto son las GitHub Actions de los workflows.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
