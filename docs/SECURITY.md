@@ -16,13 +16,13 @@
 | Herramienta | Tipo | Fecha | Resultado | Enlace a evidencia |
 |---|---|---|---|---|
 | GitHub (Settings → Advanced Security) | Controles nativos | 2026-11-08 | Dependabot alerts, secret scanning y push protection activos | `evidence/lab5/dependabot.png`, `codeql.png` |
-| CodeQL Default setup | SAST | 2026-11-08 | Configurado, pero sin lenguajes detectados: HTML y la configuración de Nginx no son lenguajes soportados. Ver limitación abajo. | `evidence/lab5/codeql.png` |
+| CodeQL Default setup (lenguaje `actions`) | SAST | 2026-11-09 | 0 alertas. Analiza solo los workflows; HTML y Nginx no son lenguajes soportados. | `evidence/lab5/codeql.png`, Security → Code scanning |
 | Semgrep (`p/owasp-top-ten`, `p/secrets`) | SAST | 2026-11-08 | 6 resultados, 1 regla: `github-actions-mutable-action-tag` | [PR #3](https://github.com/AlejandroHenao2572/LAB_FDSI_DavidPatacon_MarlioCharry/pull/3), `evidence/lab5/semgrep-antes.json`, `actions-1.png` |
 | Gitleaks (historial completo) | Secretos | 2026-11-08 | 0 fugas | `evidence/lab5/gitleaks-antes.sarif`, `actions-2.png` |
-| Dependabot (alerts + `.github/dependabot.yml`) | SCA | 2026-11-08 | 0 alertas. El grafo de dependencias está vacío porque `main` todavía no tiene workflows. Las 4 acciones usadas están desactualizadas, ninguna con un advisory conocido. | `evidence/lab5/dependabot.png`, `.github/dependabot.yml` |
+| Dependabot (alerts + `.github/dependabot.yml`) | SCA | 2026-11-09 | 0 alertas de seguridad. El grafo detecta las 4 acciones. Dependabot abrió 3 PRs de actualización (#4 `upload-artifact` 4→7, #5 `checkout` 4→7, #6 `setup-python` 5→7). | `evidence/lab5/dependabot.png`, `dependabot-pr.png`, `.github/dependabot.yml` |
 | OWASP ZAP Baseline | DAST pasivo | | | |
 
-**Limitación CodeQL:** el proyecto no tiene código en un lenguaje que CodeQL soporte. Lo único analizable son los workflows de GitHub Actions, y estos todavía no están en `main`. Se volverá a revisar después del merge. El SAST del proyecto queda cubierto por Semgrep.
+**Limitación CodeQL:** el Default setup se activó cuando el repositorio no tenía ningún lenguaje soportado (`languages: []`), y después del merge no detectó los workflows por sí solo. Se reconfiguró con el lenguaje `actions` y el análisis terminó con 0 alertas. CodeQL no reporta F-01 porque la consulta de acciones sin fijar no está en la suite por defecto; Semgrep sí la incluye. Por eso se usan dos herramientas SAST con cobertura complementaria. HTML y Nginx no tienen soporte en CodeQL.
 
 **Triage de Semgrep:**
 - **R1, verdadero positivo:** `gitleaks/gitleaks-action@v3` es una acción de un tercero referenciada por una etiqueta que se puede mover. Si esa acción se compromete, el pipeline ejecutaría código ajeno con acceso a `GITHUB_TOKEN` (cadena de suministro, CWE-829).
