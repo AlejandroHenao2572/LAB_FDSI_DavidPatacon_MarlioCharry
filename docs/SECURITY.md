@@ -15,15 +15,24 @@
 ## 2. Línea base y herramientas
 | Herramienta | Tipo | Fecha | Resultado | Enlace a evidencia |
 |---|---|---|---|---|
-| CodeQL o Semgrep | SAST | | | |
-| Gitleaks / GitHub secret scanning | Secretos | | | |
+| GitHub (Settings → Advanced Security) | Controles nativos | 2026-11-08 | Dependabot alerts, secret scanning y push protection activos | `evidence/lab5/dependabot.png`, `codeql.png` |
+| CodeQL Default setup | SAST | 2026-11-08 | Configurado, pero sin lenguajes detectados: HTML y la configuración de Nginx no son lenguajes soportados. Ver limitación abajo. | `evidence/lab5/codeql.png` |
+| Semgrep (`p/owasp-top-ten`, `p/secrets`) | SAST | 2026-11-08 | 6 resultados, 1 regla: `github-actions-mutable-action-tag` | [PR #3](https://github.com/AlejandroHenao2572/LAB_FDSI_DavidPatacon_MarlioCharry/pull/3), `evidence/lab5/semgrep-antes.json`, `actions-1.png` |
+| Gitleaks (historial completo) | Secretos | 2026-11-08 | 0 fugas | `evidence/lab5/gitleaks-antes.sarif`, `actions-2.png` |
 | Dependabot | SCA | | | |
 | OWASP ZAP Baseline | DAST pasivo | | | |
+
+**Limitación CodeQL:** el proyecto no tiene código en un lenguaje que CodeQL soporte. Lo único analizable son los workflows de GitHub Actions, y estos todavía no están en `main`. Se volverá a revisar después del merge. El SAST del proyecto queda cubierto por Semgrep.
+
+**Triage de Semgrep:**
+- **R1, verdadero positivo:** `gitleaks/gitleaks-action@v3` es una acción de un tercero referenciada por una etiqueta que se puede mover. Si esa acción se compromete, el pipeline ejecutaría código ajeno con acceso a `GITHUB_TOKEN` (cadena de suministro, CWE-829).
+- **R2, riesgo bajo / falsa alarma parcial:** `actions/checkout`, `actions/setup-python` y `actions/upload-artifact` son acciones publicadas por GitHub, que ya es un proveedor de confianza del pipeline. La regla es técnicamente correcta, pero el impacto real es bajo.
+- **`p/secrets`:** 0 resultados, coherente con Gitleaks. La evidencia del Lab 3 contiene IPs del laboratorio, no credenciales.
 
 ## 3. Hallazgos y gestión
 | ID | Categoría | Descripción sin secretos | Riesgo | Archivo/ruta | Cambio propuesto | Estado |
 |---|---|---|---|---|---|---|
-| F-01 | | | | | | Abierto |
+| F-01 | CWE-829 / OWASP A08 (integridad de software) | Acciones de GitHub referenciadas por etiqueta mutable (`@v3`, `@v4`) en lugar de un SHA de commit | Medio (integridad del pipeline) | `.github/workflows/*.yml` | Fijar cada `uses:` a un SHA completo y dejar que Dependabot lo actualice | Abierto |
 
 ## 4. Validación antes y después
 - Evidencia inicial (captura o artefacto):
