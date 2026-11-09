@@ -70,8 +70,12 @@ Dependencia analizada: **`actions/upload-artifact@v4`** (3 versiones mayores atr
 - Riesgo residual y decisión:
 
 ## 5. Pentest autorizado
-- Hipótesis:
-- Entorno de pruebas aislado:
-- Solicitudes inocuas y respuestas observadas (sin datos personales):
-- Resultado: validado / no reproducible / requiere revisión
-- Recomendación y prueba de regresión:
+- **Hipótesis (F-03):** el servidor no envía `Content-Security-Policy` en ninguna respuesta. Por eso el navegador ejecutaría cualquier script inline o externo que llegara a la página, y no hay una segunda barrera contra XSS.
+- **Entorno de pruebas aislado:** contenedor `nginx:stable` con `nginx/muvautomation.conf` y `app/` del repositorio, publicado solo en `127.0.0.1:8080`. No hay usuarios, cookies ni datos reales.
+- **Solicitudes inocuas y respuestas observadas:**
+  - Se hicieron 4 peticiones `GET` de solo lectura con `curl`, en estos casos: página principal (200), archivo estático (200), ruta inexistente (404) y ruta oculta `/.git/config` (403).
+  - **Ninguna** respuesta incluye `Content-Security-Policy`. Los headers del Lab 3 (`nosniff`, `X-Frame-Options`, `Referrer-Policy`) sí están presentes, y `/.git/config` sigue bloqueado.
+  - Evidencia: `evidence/lab5/pentest-antes.txt`.
+- **Prueba en el navegador:** en la consola de DevTools, con la página abierta, se agregó un `<script>` inline inofensivo (`console.log`). Se ejecuta porque no hay política que lo bloquee. Evidencia: `evidence/lab5/pentest-csp-antes.png`.
+- **Resultado:** **validado**. Es una debilidad de configuración (falta un control de defensa en profundidad). No es un XSS explotable hoy: el sitio es estático y no refleja datos del usuario. Por eso el riesgo es Medio y no Alto.
+- **Recomendación y prueba de regresión:** agregar en Nginx una CSP restrictiva con `always`, para que también se envíe en las respuestas 4xx, y verificarla con un script automático que falle si el header desaparece (Parte 7).
