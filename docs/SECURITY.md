@@ -80,7 +80,7 @@ Dependencia analizada: **`actions/upload-artifact@v4`** (3 versiones mayores atr
   - `dependabot.yml` con cooldown.
   - `.semgrepignore` excluye `evidence/`, porque los reportes HTML de ZAP generaban 16 falsos positivos `plaintext-http-link`.
 - **Prueba de regresión:** `scripts/test-headers.sh` levanta Nginx con la configuración del repositorio. Falla si falta algún header de seguridad, si `Server` expone la versión o si `/.git/config` deja de devolver 403. Se ejecuta en cada PR como el job `Regresión de headers (Nginx)` del workflow `seguridad-estatica.yml`.
-- **Pull request con corrección:** rama `security/remediacion` → `main` (enlace al agregarlo).
+- **Pull request con corrección:** [PR #7](https://github.com/AlejandroHenao2572/LAB_FDSI_DavidPatacon_MarlioCharry/pull/7) (`security/remediacion` → `main`); 6/6 checks en verde, incluida la regresión. Captura: `evidence/lab5/pr-remediacion.png`.
 - **Riesgo residual y decisión:**
   - **H1 y H4 del Lab 3 (sin TLS):** siguen abiertos. La CSP no protege contenido que viaja en claro. Pendiente: HTTPS y HSTS.
   - **Caché de contenido público:** riesgo aceptado.
